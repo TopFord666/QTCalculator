@@ -21,6 +21,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnDivision,SIGNAL(clicked()),this,SLOT(btnBinaryOperatorClick()));
     connect(ui->btnMinus,SIGNAL(clicked()),this,SLOT(btnBinaryOperatorClick()));
     connect(ui->btnPlus,SIGNAL(clicked()),this,SLOT(btnBinaryOperatorClick()));
+    connect(ui->btnInverse,SIGNAL(clicked()),this,SLOT(btnUnaryOperatorClick()));
+    connect(ui->btnNegation,SIGNAL(clicked()),this,SLOT(btnUnaryOperatorClick()));
+    connect(ui->btnSquare,SIGNAL(clicked()),this,SLOT(btnUnaryOperatorClick()));
+    connect(ui->btnPercentage,SIGNAL(clicked()),this,SLOT(btnUnaryOperatorClick()));
+    connect(ui->btnSqrt,SIGNAL(clicked()),this,SLOT(btnUnaryOperatorClick()));
 }
 
 MainWindow::~MainWindow()
@@ -53,19 +58,27 @@ void MainWindow::on_btnClearAll_clicked()
     ui->display->setText(operand);
 }
 
+
+void MainWindow::on_btnClear_clicked()
+{
+    operand.clear();
+    ui->display->setText("0");
+}
+
 void MainWindow::on_btnEquals_clicked()
 {
     if (!operand.isEmpty()) {
         operands.push_back(operand);
         operand.clear();
     }
+if (operands.size() >= 2 && !opcodes.isEmpty()) {
+        QString result = calculate();
+        ui->display->setText(result);
 
-    QString result = calculate();
-    ui->display->setText(result);
-
-    operands.clear();
-    opcodes.clear();
-    operand = result;
+        operands.clear();
+        opcodes.clear();
+        operand = result;
+    }
 }
 
 
@@ -79,6 +92,35 @@ void MainWindow::btnNumClicked()
     else
         operand += digit;
     ui->display->setText(operand);
+}
+
+void MainWindow::btnUnaryOperatorClick()
+{
+    if (!operand.isEmpty()) {
+        double rs =operand.toDouble();
+        operand="";
+        QString op = qobject_cast<QPushButton*>(sender())->text();
+        if(op=="%")
+        {
+            rs /= 100.0;
+        }else if(op=="1/x"){
+            if(rs!=0)
+                rs = 1.0/rs;
+            else{
+                ui->display->setText("除数不能为0");
+                operand.clear();
+                return;
+            }
+        }else if(op=="x²"){
+            rs *=rs;
+        }else if(op=="²√x"){
+            rs=sqrt(rs);
+        }else if(op=="+/-")
+        {
+            rs = -rs;
+        }
+        ui->display->setText(QString::number(rs));
+    }
 }
 
 void MainWindow::btnBinaryOperatorClick()
@@ -104,6 +146,8 @@ void MainWindow::btnBinaryOperatorClick()
         ui->statusbar->showMessage(QString("operands is %1,opcodes is %2").arg(operands.size()).arg(opcodes.size()));
     }
 }
+
+
 
 QString MainWindow::calculate(bool *ok)
 {
@@ -141,5 +185,7 @@ QString MainWindow::calculate(bool *ok)
         );
     return QString::number(result);
 }
+
+
 
 

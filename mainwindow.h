@@ -32,6 +32,8 @@ private slots:
 
     void btnBinaryOperatorClick();
 
+    void btnUnaryOperatorClick();
+
     void on_btnPoint_clicked();
 
     void on_btnDel_clicked();
@@ -39,6 +41,8 @@ private slots:
     void on_btnClearAll_clicked();
 
     void on_btnEquals_clicked();
+
+    void on_btnClear_clicked();
 
 private:
     Ui::MainWindow *ui;
