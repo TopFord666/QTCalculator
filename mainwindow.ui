@@ -13,6 +13,22 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow, QWidget#centralWidget { background-color: #1E1E2E; }
+QLineEdit { background-color: #181825; color: #cdd6f4; font-size: 36px; border: none; border-radius: 10px; padding: 10px; qproperty-alignment: 'AlignRight | AlignVCenter'; }
+QPushButton { background-color: #313244; color: #cdd6f4; border: none; border-radius: 10px; padding: 14px; margin: 2px; font-size: 18px; }
+QPushButton:hover { background-color: #45475a; }
+QPushButton:pressed { background-color: #585b70; }
+QPushButton#btnClear, QPushButton#btnClearAll, QPushButton#btnDel { background-color: #453545; }
+QPushButton#btnClear:hover, QPushButton#btnClearAll:hover, QPushButton#btnDel:hover { background-color: #5a455a; }
+QPushButton#btnClear:pressed, QPushButton#btnClearAll:pressed, QPushButton#btnDel:pressed { background-color: #6e556e; }
+QPushButton#btnPlus, QPushButton#btnMinus, QPushButton#btnMultiplied, QPushButton#btnDivision { background-color: #314b5a; }
+QPushButton#btnPlus:hover, QPushButton#btnMinus:hover, QPushButton#btnMultiplied:hover, QPushButton#btnDivision:hover { background-color: #3d5d6e; }
+QPushButton#btnPlus:pressed, QPushButton#btnMinus:pressed, QPushButton#btnMultiplied:pressed, QPushButton#btnDivision:pressed { background-color: #4a6f82; }
+QPushButton#btnEquals { background-color: #2b4b3b; }
+QPushButton#btnEquals:hover { background-color: #35604a; }
+QPushButton#btnEquals:pressed { background-color: #3f7559; }</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -24,6 +40,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>%</string>
@@ -38,6 +60,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>CE</string>
         </property>
@@ -50,6 +78,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>C</string>
@@ -64,6 +98,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>⌫</string>
         </property>
@@ -76,6 +116,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>1/x</string>
@@ -90,6 +136,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>x²</string>
         </property>
@@ -102,6 +154,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>²√x</string>
@@ -116,6 +174,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>÷</string>
         </property>
@@ -129,8 +193,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>7</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -142,8 +218,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>8</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -155,8 +243,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>9</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -167,6 +267,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>×</string>
@@ -181,8 +287,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>4</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -194,8 +312,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>5</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -207,8 +337,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>6</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -219,6 +361,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>-</string>
@@ -233,8 +381,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>1</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -246,8 +406,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>2</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -259,8 +431,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>3</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -271,6 +455,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>+</string>
@@ -285,6 +475,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>+/-</string>
         </property>
@@ -298,8 +494,20 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>0</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -310,6 +518,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>.</string>
@@ -323,6 +537,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>新宋体</family>
+          <pointsize>-1</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>=</string>
@@ -343,7 +563,7 @@
         <property name="font">
          <font>
           <family>新宋体</family>
-          <pointsize>28</pointsize>
+          <pointsize>-1</pointsize>
          </font>
         </property>
         <property name="alignment">
