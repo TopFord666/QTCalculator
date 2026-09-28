@@ -119,7 +119,8 @@ void MainWindow::btnUnaryOperatorClick()
         {
             rs = -rs;
         }
-        ui->display->setText(QString::number(rs));
+        operand = QString::number(rs);
+        ui->display->setText(operand);
     }
 }
 
