@@ -20,6 +20,10 @@ public:
 private slots:
     void btnNumClicked();
 
+    void on_btnPoint_clicked();
+
+    void on_btnDel_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
