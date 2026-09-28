@@ -26,7 +26,7 @@ public:
 
     QStack<QString> opcodes;
 
-    QString calculate();
+    QString calculate(bool *ok=NULL);
 private slots:
     void btnNumClicked();
 

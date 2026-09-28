@@ -48,6 +48,8 @@ void MainWindow::on_btnDel_clicked()
 void MainWindow::on_btnClearAll_clicked()
 {
     operand.clear();
+    operands.clear();
+    opcodes.clear();
     ui->display->setText(operand);
 }
 
@@ -69,8 +71,6 @@ void MainWindow::on_btnEquals_clicked()
 
 void MainWindow::btnNumClicked()
 {
-
-
     QString digit=qobject_cast<QPushButton*>(sender())->text();
     if(digit=="0"&&operand=="0")
         digit="";
@@ -84,48 +84,62 @@ void MainWindow::btnNumClicked()
 void MainWindow::btnBinaryOperatorClick()
 {
     opcode =qobject_cast<QPushButton*>(sender())->text();
-    if(operand!="")
+    if(!operand.isEmpty())
     {
         operands.push_back(operand);
-        operand="";
-        opcodes.push_back(opcode);
+        operand.clear();
+    }
+    opcodes.push_back(opcode);
+
+    //计算前日志打印
+    ui->statusbar->showMessage(QString("calculation is in progress : operands is %1,opcodes is %2")
+                                   .arg(operands.size())
+                                   .arg(opcodes.size()));
+
+    if (operands.size() >= 2 && !opcodes.isEmpty()) {
         QString result = calculate();
         ui->display->setText(result);
-    }
-}
-
-QString MainWindow::calculate()
-{
-    double result;
-    if (2 == operands.size() && opcodes.size() > 0) {
-        QString op =opcodes.front();
-        opcodes.pop_front();
-        double n1 = operands.front().toDouble();
-        operands.pop_front();
-        double n2 = operands.front().toDouble();
-        operands.pop_front();
-        if (op == "+") {
-            result = n1 + n2;
-        } else if (op == "-") {
-            result = n1 - n2;
-        } else if (op == "×") {
-            result = n1 * n2;
-        } else if (op == "÷") {
-            if (n2 == 0) {
-                qDebug() << "除数不能为0";
-                ui->display->setText("除数不能为0");
-                return "除数不能为0";
-            }
-            result = n1 / n2;
-        }
-        ui->statusbar->showMessage(QString("calculation is in progress : operands is %1,opcodes is %2").arg(operands.size()).arg(opcodes.size()));
-
+        operands.push_back(result);
     }else{
         ui->statusbar->showMessage(QString("operands is %1,opcodes is %2").arg(operands.size()).arg(opcodes.size()));
     }
+}
 
+QString MainWindow::calculate(bool *ok)
+{
+    //安全判断
+    if (operands.size() < 2 || opcodes.isEmpty()) {
+        ui->statusbar->showMessage("计算出错");
+        return operand.isEmpty() ? "0" : operand;
+    }
+    double result=0;
+    QString op =opcodes.front();
+    opcodes.pop_front();
+    double n1 = operands.front().toDouble();
+    operands.pop_front();
+    double n2 = operands.front().toDouble();
+    operands.pop_front();
+    if (op == "+") {
+        result = n1 + n2;
+    } else if (op == "-") {
+        result = n1 - n2;
+    } else if (op == "×") {
+        result = n1 * n2;
+    } else if (op == "÷") {
+        if (n2 == 0) {
+            ui->display->setText("除数不能为0");
+            return "除数不能为0";
+        }
+        result = n1 / n2;
+    }
+    // 计算后日志打印
+    ui->statusbar->showMessage(
+        QString("After Compute: operands=%1, opcodes=%2, result=%3")
+            .arg(operands.size())
+            .arg(opcodes.size())
+            .arg(result)
+        );
     return QString::number(result);
-
 }
 
 
