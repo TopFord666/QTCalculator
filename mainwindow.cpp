@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //初始化
+    isNewInput = true;
 
     btnNums = {
         {Qt::Key_0, ui->btnNum0},
@@ -54,6 +56,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btnPoint_clicked()
 {
+    if (isNewInput) {
+        operand = "0";
+        isNewInput = false;
+    }
+
     if(!operand.contains("."))
         operand+=qobject_cast<QPushButton*>(sender())->text();
     ui->display->setText(operand);
@@ -62,7 +69,17 @@ void MainWindow::on_btnPoint_clicked()
 
 void MainWindow::on_btnDel_clicked()
 {
+    // 操作数为空时不处理，避免 left(-1) 异常
+    if (operand.isEmpty()) {
+        return;
+    }
     operand = operand.left(operand.length()-1);
+    // 删空后显示0
+    if (operand.isEmpty()) {
+        ui->display->setText("0");
+        isNewInput = true;
+        return;
+    }
     ui->display->setText(operand);
 }
 
@@ -72,6 +89,7 @@ void MainWindow::on_btnClearAll_clicked()
     operand.clear();
     operands.clear();
     opcodes.clear();
+    isNewInput = true;
     ui->display->setText(operand);
 }
 
@@ -79,29 +97,53 @@ void MainWindow::on_btnClearAll_clicked()
 void MainWindow::on_btnClear_clicked()
 {
     operand.clear();
+    isNewInput = true;
     ui->display->setText("0");
 }
 
 
 void MainWindow::on_btnEquals_clicked()
 {
+    // 将当前输入的数字压入操作数栈
     if (!operand.isEmpty()) {
         operands.push_back(operand);
         operand.clear();
     }
-if (operands.size() >= 2 && !opcodes.isEmpty()) {
+
+    // 循环计算栈中所有剩余运算（左到右依次处理）
+    while (operands.size() >= 2 && !opcodes.isEmpty()) {
         QString result = calculate();
         ui->display->setText(result);
 
-        operands.clear();
-        opcodes.clear();
-        operand = result;
+        // 除零时已经清空所有状态，直接返回
+        if (result == "除数不能为0") {
+            operand.clear();
+            isNewInput = true;
+            return;
+        }
+
+        // 计算结果插入到栈首，作为下一次运算的左操作数
+        // 使用 prepend 确保非交换运算（减、除）的顺序正确
+        operands.prepend(result);
     }
+
+    // 最终结果保存到 operand，清空操作数栈
+    if (!operands.isEmpty()) {
+        operand = operands.front();
+        operands.clear();
+    }
+    isNewInput = true;
 }
 
 
 void MainWindow::btnNumClicked()
 {
+    //符号重复判断
+    if (isNewInput) {
+        operand.clear();
+        isNewInput = false;
+    }
+
     QString digit=qobject_cast<QPushButton*>(sender())->text();
     if(digit=="0"&&operand=="0")
         digit="";
@@ -126,7 +168,11 @@ void MainWindow::btnUnaryOperatorClick()
                 rs = 1.0/rs;
             else{
                 ui->display->setText("除数不能为0");
+                //清空
                 operand.clear();
+                operands.clear();
+                opcodes.clear();
+                isNewInput = true;
                 return;
             }
         }else if(op=="x²"){
@@ -139,34 +185,53 @@ void MainWindow::btnUnaryOperatorClick()
         }
         operand = QString::number(rs);
         ui->display->setText(operand);
+        // 一元运算结果是最终值，下次输入数字应重新开始
+        isNewInput = true;
     }
 }
 
 void MainWindow::btnBinaryOperatorClick()
 {
-    opcode =qobject_cast<QPushButton*>(sender())->text();
-    if(!operand.isEmpty())
-    {
+    opcode = qobject_cast<QPushButton*>(sender())->text();
+
+    // 没有任何操作数和当前输入时，忽略运算符点击
+    if (operands.isEmpty() && operand.isEmpty()) {
+        return;
+    }
+
+    // 连续按运算符：替换最后一个运算符而非追加
+    if (isNewInput && !opcodes.isEmpty()) {
+        opcodes.pop();
+        opcodes.push_back(opcode);
+        ui->statusbar->showMessage(QString("替换运算符: %1").arg(opcode));
+        return;
+    }
+
+    // 将当前输入的数字压入操作数栈
+    if (!operand.isEmpty()) {
         operands.push_back(operand);
         operand.clear();
     }
-    opcodes.push_back(opcode);
 
-    //计算前日志打印
-    ui->statusbar->showMessage(QString("calculation is in progress : operands is %1,opcodes is %2")
-                                   .arg(operands.size())
-                                   .arg(opcodes.size()));
-
+    // 左到右模式：栈中已有两个操作数和一个运算符时，先计算前一步
     if (operands.size() >= 2 && !opcodes.isEmpty()) {
         QString result = calculate();
+        if (result == "除数不能为0") {
+            return;
+        }
         ui->display->setText(result);
+        // 计算结果作为下一个左操作数，继续参与后续运算
         operands.push_back(result);
-    }else{
-        ui->statusbar->showMessage(QString("operands is %1,opcodes is %2").arg(operands.size()).arg(opcodes.size()));
     }
+
+    // 压入新运算符
+    opcodes.push_back(opcode);
+    isNewInput = true;
+
+    ui->statusbar->showMessage(QString("运算符入栈: operands=%1, opcodes=%2")
+                                   .arg(operands.size())
+                                   .arg(opcodes.size()));
 }
-
-
 
 QString MainWindow::calculate(bool *ok)
 {
@@ -191,6 +256,11 @@ QString MainWindow::calculate(bool *ok)
     } else if (op == "÷") {
         if (n2 == 0) {
             ui->display->setText("除数不能为0");
+            //清空
+            operands.clear();
+            opcodes.clear();
+            operand.clear();
+            isNewInput = true;
             return "除数不能为0";
         }
         result = n1 / n2;
@@ -207,14 +277,43 @@ QString MainWindow::calculate(bool *ok)
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    foreach(auto btnKey,btnNums.keys())
-    {
-        if(event->key()==btnKey)
+    // 数字键映射
+    foreach (auto btnKey, btnNums.keys()) {
+        if (event->key() == btnKey) {
             btnNums[btnKey]->animateClick();
+            return;
+        }
+    }
+
+    // 运算符键盘映射
+    switch (event->key()) {
+    case Qt::Key_Plus:
+        ui->btnPlus->animateClick();
+        break;
+    case Qt::Key_Minus:
+        ui->btnMinus->animateClick();
+        break;
+    case Qt::Key_Asterisk:
+        ui->btnMultiplied->animateClick();
+        break;
+    case Qt::Key_Slash:
+        ui->btnDivision->animateClick();
+        break;
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        ui->btnEquals->animateClick();
+        break;
+    case Qt::Key_Backspace:
+        ui->btnDel->animateClick();
+        break;
+    case Qt::Key_Period:
+        ui->btnPoint->animateClick();
+        break;
+    case Qt::Key_Escape:
+        ui->btnClearAll->animateClick();
+        break;
+    default:
+        QMainWindow::keyPressEvent(event);
+        break;
     }
 }
-
-
-
-
-

@@ -32,6 +32,8 @@ public:
     QMap<int,QPushButton*> btnNums;
 
     QString calculate(bool *ok=NULL);
+
+    bool isNewInput;
 private slots:
     void btnNumClicked();
 
